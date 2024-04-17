@@ -1,14 +1,11 @@
-'use client'
+"use client";
 
-import Head from 'next/head';
-import React from 'react';
-import '../styles/Home.module.css';
-
+import Head from "next/head";
+import React from "react";
+import "../styles/Home.module.css";
 
 export default function Home() {
-
   const [url, setUrl] = React.useState<string>("");
-
 
   function handleUrlChange(event: React.ChangeEvent<HTMLInputElement>) {
     console.log(event.target.value);
@@ -20,14 +17,12 @@ export default function Home() {
     console.log(url);
   }
 
-
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200">
-
       <div className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-      <h1 className="text-6xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-custom-blue via-custom-orange to-custom-red hover:from-custom-red hover:via-custom-orange hover:to-custom-blue transition-all duration-1000">
-        GitFriendly
-      </h1>
+        <h1 className="text-6xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-custom-blue via-custom-orange to-custom-red hover:from-custom-red hover:via-custom-orange hover:to-custom-blue transition-all duration-1000">
+          GitFriendly
+        </h1>
 
         <form className="flex w-full max-w-5xl" onSubmit={handleSubmit}>
           <input
