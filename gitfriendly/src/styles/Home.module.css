@@ -1,0 +1,11 @@
+.text-gradient {
+  background: linear-gradient(90deg, #ED6A5A, #0B3C49, #9BC1BC);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: background 2s ease-in-out; /* Apply transition to ensure smooth change */
+}
+
+.text-gradient-hover:hover {
+  background: linear-gradient(90deg, #9BC1BC, #0B3C49, #ED6A5A);
+}
+
