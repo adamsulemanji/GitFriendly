@@ -2,9 +2,7 @@
 
 import Head from 'next/head';
 import React from 'react';
-import '../styles/Home.module.css'; // Ensure you have this import to include custom CSS
-
-
+import '../styles/Home.module.css';
 
 
 export default function Home() {
