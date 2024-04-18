@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Run "npm run clean" before committing
+
+npm run clean
