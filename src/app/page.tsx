@@ -7,13 +7,11 @@ export default function Home() {
   const [url, setUrl] = React.useState<string>("");
 
   function handleUrlChange(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log(event.target.value);
     setUrl(event.target.value);
   }
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log(url);
   }
 
   return (

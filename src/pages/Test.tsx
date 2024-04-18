@@ -3,10 +3,9 @@
 import React from "react";
 
 export default function Test() {
-  const x = 5;
 
   function handleClick() {
-    console.log("hello world");
+    console.warn("hello world");
   }
 
   return (
