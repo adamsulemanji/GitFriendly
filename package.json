@@ -34,7 +34,17 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint && npm run format && git add ."
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.tsx": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }

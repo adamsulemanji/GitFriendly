@@ -3,6 +3,9 @@
 import React from "react";
 
 export default function Test() {
+
+    var x = 5;
+
   function handleClick() {
     console.log("hello world");
   }
