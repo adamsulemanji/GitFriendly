@@ -14,14 +14,15 @@ export default function Home() {
 
   async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault();
-    axios.post("http://127.0.0.1:5000/clean", { url })
-      .then(response => {
+    axios
+      .post("http://127.0.0.1:5000/clean", { url })
+      .then((response) => {
         console.log(response.data);
         if (response.data) {
           setData(response.data.cleanedUrl);
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
   }
