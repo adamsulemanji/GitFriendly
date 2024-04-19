@@ -10,7 +10,7 @@
     "slay": "concurrently \"npm run dev\" \"npm run flask\"",
     "flask": "cd server && . venv/bin/activate && python3 main.py",
     "format": "prettier --write .",
-    "prepare": "husky",
+    "setup": "npm install && cd server && python3 -m venv venv && . venv/bin/activate && pip install -r requirements.txt",
     "clean": "npm run format && npm run lint"
   },
   "dependencies": {
