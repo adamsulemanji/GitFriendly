@@ -3,7 +3,6 @@
 import React from "react";
 
 export default function Test() {
-
   function handleClick() {
     console.warn("hello world");
   }

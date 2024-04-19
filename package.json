@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint --fix",
     "slay": "concurrently \"npm run dev\" \"npm run flask\"",
-    "flask": "cd server && . venv/bin/activate && flask run",
+    "flask": "cd server && . venv/bin/activate && python3 main.py",
     "format": "prettier --write .",
     "prepare": "husky",
     "clean": "npm run format && npm run lint"
@@ -22,6 +22,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "axios": "^1.6.8",
     "concurrently": "^8.2.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.1",

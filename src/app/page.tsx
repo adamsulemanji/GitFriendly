@@ -2,16 +2,29 @@
 
 import React from "react";
 import "../styles/Home.module.css";
+import axios from "axios";
 
 export default function Home() {
   const [url, setUrl] = React.useState<string>("");
+  const [data, setData] = React.useState<string>("");
 
   function handleUrlChange(event: React.ChangeEvent<HTMLInputElement>) {
     setUrl(event.target.value);
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
     event.preventDefault();
+    axios
+      .post("http://127.0.0.1:5000/clean", { url })
+      .then((response) => {
+        console.log(response.data);
+        if (response.data) {
+          setData(response.data.cleanedUrl);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
 
   return (
@@ -34,6 +47,7 @@ export default function Home() {
           </button>
         </form>
       </div>
+      {data && <div>{data}</div>}
     </div>
   );
 }
