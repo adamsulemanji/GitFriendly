@@ -44,14 +44,16 @@ export default function Home() {
       return;
     }
 
-    axios
-      .post("http://127.0.0.1:5000/clean", { url })
+    axios.post("http://127.0.0.1:5000/clean", { url })
       .then((response) => {
-        console.log(response.data);
-        if (response.data) {
+        if (response.data && response.data.modifiedHtml) {
+          const blob = new Blob([response.data.modifiedHtml], {type: 'text/html'});
+          const url = URL.createObjectURL(blob);
+          window.open(url, '_blank');
+          
           toast({
             title: "URL Submitted",
-            description: "We are cleaning the data for you",
+            description: "Opening the cleaned data in a new tab.",
             status: "info",
             duration: 9000,
             isClosable: true
@@ -60,8 +62,16 @@ export default function Home() {
       })
       .catch((error) => {
         console.error(error);
+        toast({
+          title: "Fetch Error",
+          description: "Failed to fetch and process the URL",
+          status: "error",
+          duration: 9000,
+          isClosable: true
+        });
       });
   }
+
 
   return (
     <ChakraProvider>
