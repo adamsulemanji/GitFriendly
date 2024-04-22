@@ -2,13 +2,14 @@
 
 import React from "react";
 import "../styles/Home.module.css";
+import LoadingScreen from "@/components/LoadingScreen";
 import axios from "axios";
 import { ChakraProvider } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 
 export default function Home() {
   const [url, setUrl] = React.useState<string>("");
-  const [data, setData] = React.useState<string>("");
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const toast = useToast();
 
   function handleUrlChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -19,9 +20,8 @@ export default function Home() {
     return url.includes("github.com") && url.startsWith("https://");
   }
 
-  async function handleSubmit(event: React.ChangeEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
     if (!url) {
       toast({
         title: "No URL",
@@ -44,13 +44,17 @@ export default function Home() {
       return;
     }
 
+    setIsLoading(true);
+    setTimeout(() => {
+      console.log("Loading...");
+    }, 10000);
     axios.post("http://127.0.0.1:5000/clean", { url })
       .then((response) => {
+        setIsLoading(false); // Stop loading
         if (response.data && response.data.modifiedHtml) {
-          const blob = new Blob([response.data.modifiedHtml], {type: 'text/html'});
+          const blob = new Blob([response.data.modifiedHtml], { type: "text/html" });
           const url = URL.createObjectURL(blob);
-          window.open(url, '_blank');
-          
+          window.open(url, "_blank");
           toast({
             title: "URL Submitted",
             description: "Opening the cleaned data in a new tab.",
@@ -62,6 +66,7 @@ export default function Home() {
       })
       .catch((error) => {
         console.error(error);
+        setIsLoading(false); // Stop loading on error
         toast({
           title: "Fetch Error",
           description: "Failed to fetch and process the URL",
@@ -72,10 +77,10 @@ export default function Home() {
       });
   }
 
-
   return (
     <ChakraProvider>
-      <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200">
+      <div className="flex min-h-screen flex-col items-center justify-center bg-blue-50">
+      {isLoading && <LoadingScreen />}
         <div className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
           <h1 className="text-6xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-custom-blue via-custom-orange to-custom-red hover:from-custom-red hover:via-custom-orange hover:to-custom-blue transition-all duration-1000">
             GitFriendly
@@ -94,7 +99,6 @@ export default function Home() {
             </button>
           </form>
         </div>
-        {data && <div>{data}</div>}
       </div>
     </ChakraProvider>
   );

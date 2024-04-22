@@ -51,6 +51,7 @@ def hello():
 
 @app.route("/clean", methods=['POST'])
 def clean():
+    print("Request received")
     data = request.json
     url = data.get('url', '')
 
