@@ -48,11 +48,14 @@ export default function Home() {
     setTimeout(() => {
       console.log("Loading...");
     }, 10000);
-    axios.post("http://127.0.0.1:5000/clean", { url })
+    axios
+      .post("http://127.0.0.1:5000/clean", { url })
       .then((response) => {
         setIsLoading(false); // Stop loading
         if (response.data && response.data.modifiedHtml) {
-          const blob = new Blob([response.data.modifiedHtml], { type: "text/html" });
+          const blob = new Blob([response.data.modifiedHtml], {
+            type: "text/html"
+          });
           const url = URL.createObjectURL(blob);
           window.open(url, "_blank");
           toast({
@@ -80,7 +83,7 @@ export default function Home() {
   return (
     <ChakraProvider>
       <div className="flex min-h-screen flex-col items-center justify-center bg-blue-50">
-      {isLoading && <LoadingScreen />}
+        {isLoading && <LoadingScreen />}
         <div className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
           <h1 className="text-6xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-custom-blue via-custom-orange to-custom-red hover:from-custom-red hover:via-custom-orange hover:to-custom-blue transition-all duration-1000">
             GitFriendly
