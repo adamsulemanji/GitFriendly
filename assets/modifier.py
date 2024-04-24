@@ -2,10 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import webbrowser
 
-
-
-
-
 def clean(url):
     response = requests.get(url)
     if response.status_code != 200:
@@ -130,6 +126,57 @@ def clean(url):
     for tag in soup.find_all(style=True):
         del tag['style']
 
+    # Remove SVG icons
+    for svg in soup.find_all('svg'):
+        svg.decompose()
+
+    # Remove IMG tags that are often used for icons
+    for img in soup.find_all('img'):
+        img.decompose()
+
+    # Remove animations from all style tags (for inline and internal CSS)
+    for style in soup.find_all('style'):
+        css = style.string
+        if css:
+            # Remove animations and transitions
+            css = css.replace('animation:', '/* disabled animation: */')
+            css.replace('transition:', '/* disabled transition: */')
+            style.string = css
+
+    # Also, consider removing links to external JS files that might control animations
+    for script in soup.find_all('script'):
+        script.decompose()
+
+        # Adding tabindex="0" to elements that should be focusable
+    for link in soup.find_all('a'):
+        link['tabindex'] = '0'
+
+    for btn in soup.find_all('button'):
+        btn['tabindex'] = '0'
+
+    # Ensuring all input elements are focusable and have labels
+    for input_elem in soup.find_all('input'):
+        input_elem['tabindex'] = '0'
+        if not input_elem.has_attr('id'):
+            input_elem['id'] = input_elem.get('name', 'input') + '_id'
+        if not soup.find('label', {'for': input_elem['id']}):
+            # Create a label if none exists
+            label = soup.new_tag('label')
+            label['for'] = input_elem['id']
+            label.string = 'Input:'
+            input_elem.insert_before(label)
+
+    # Adding visual focus indicators via internal CSS
+    styles = soup.find('style')
+    if not styles:
+        styles = soup.new_tag('style')
+        soup.head.append(styles)
+    
+    packages_section = soup.find('div', {'id': 'section_id_or_class'})
+    if packages_section:
+        packages_section.decompose()
+
+
     # Set viewport for mobile accessibility
     meta_viewport = soup.new_tag('meta', attrs={'name': 'viewport', 'content': 'width=device-width, initial-scale=1'})
     head = soup.find('head')
@@ -141,7 +188,8 @@ def clean(url):
         file.write(updated_html_content)
 
     # open up the cleaned html in browser
-    webbrowser.open('file:///Users/adamsulemanji/Desktop/College/SPRING2024/CSCE689-AC/GitFriendly/assets/cleaned_github_page.html')
+    # webbrowser.open('file:///Users/adamsulemanji/Desktop/College/SPRING2024/CSCE689-AC/GitFriendly/assets/cleaned_github_page.html')
+    webbrowser.open('file:/Users/nikki/Library/CloudStorage/OneDrive-TexasA&MUniversity/YEAR FOUR/SPRING 2024/CSCE 432/GitFriendly/assets/cleaned_github_page.html')
 
 
 
