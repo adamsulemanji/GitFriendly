@@ -7,11 +7,13 @@ def clean(url):
     if response.status_code != 200:
         return f"Failed to retrieve the page, status code: {response.status_code}"
 
-    # dump clean html to file
-    with open('github_page.html', 'w', encoding='utf-8') as file:
-        file.write(response.text)
+    
 
     soup = BeautifulSoup(response.text, 'html.parser')
+
+    # dump clean html to file
+    with open('github_page.html', 'w', encoding='utf-8') as file:
+        file.write(soup.prettify())
 
     # Remove the header using the CSS selector
     header = soup.select_one('div > header')
@@ -176,6 +178,64 @@ def clean(url):
     if packages_section:
         packages_section.decompose()
 
+    button = soup.find('button', {'data-target': 'qbsearch-input.inputButton'})
+    if button:
+        button['data-hotkey'] = 's,/'  # Ensure this attribute is properly quoted
+        button['placeholder'] = "Search or jump to..."  # Move this to input if button doesn't use it
+
+    # Find and remove the specified div containing "Releases"
+    release_info_div = soup.select_one("div.BorderGrid-cell > h2 > a[href*='/releases']")
+    if release_info_div:
+        # Navigate up two parent elements to reach the 'div.BorderGrid-row' to remove the whole block
+        release_row_div = release_info_div.find_parent("div", class_="BorderGrid-cell").find_parent("div", class_="BorderGrid-row")
+        if release_row_div:
+            release_row_div.decompose()
+
+    # Find and remove the specified div containing "Packages"
+    packages_info_div = soup.select_one("div.BorderGrid-cell > h2 > a[href*='/packages']")
+    if packages_info_div:
+        # Navigate up two parent elements to reach the 'div.BorderGrid-row' to remove the whole block
+        packages_row_div = packages_info_div.find_parent("div", class_="BorderGrid-cell").find_parent("div", class_="BorderGrid-row")
+        if packages_row_div:
+            packages_row_div.decompose()
+
+    # # Find the div with the specific class that indicates the "About" section
+    # about_div = soup.find("div", class_="hide-sm hide-md")
+    # if about_div:
+    #     # Check if the heading 'h2' within this div contains the text "About"
+    #     h2 = about_div.find("h2")
+    #     if h2 and h2.text.strip() == "About":
+    #         about_div.decompose()  # Remove this div from the soup
+
+    # Find the div with the specific id that indicates the "repository-details-container"
+    repo_details_container = soup.find("div", id="repository-details-container")
+    if repo_details_container:
+        repo_details_container.decompose()
+
+    # change all ul to ol
+    for ul in soup.find_all('ul'):
+        ol = soup.new_tag('ol')
+        ol['tabindex'] = '0'
+        ul.replace_with(ol)
+        for li in ul.find_all('li'):
+            ol.append(li)
+
+    # make all buttons and link tags focusable
+    for button in soup.find_all('button'):
+        button['tabindex'] = '0'
+
+    for link in soup.find_all('a'):
+        link['tabindex'] = '0'
+
+    for input in soup.find_all('input'):
+        input['tabindex'] = '0'
+
+    # Add a skip link to the main content
+    skip_link = soup.new_tag('a', href='#main')
+    skip_link.string = 'Skip to main content'
+    body.insert(0, skip_link)
+
+    
 
     # Set viewport for mobile accessibility
     meta_viewport = soup.new_tag('meta', attrs={'name': 'viewport', 'content': 'width=device-width, initial-scale=1'})
@@ -183,14 +243,15 @@ def clean(url):
     head.append(meta_viewport)
 
     # dump clean html to file
-    updated_html_content = str(soup)
+    
+    pretty_html = soup.prettify()
+
     with open('cleaned_github_page.html', 'w', encoding='utf-8') as file:
-        file.write(updated_html_content)
+        file.write(pretty_html)
 
     # open up the cleaned html in browser
-    # webbrowser.open('file:///Users/adamsulemanji/Desktop/College/SPRING2024/CSCE689-AC/GitFriendly/assets/cleaned_github_page.html')
-    webbrowser.open('file:/Users/nikki/Library/CloudStorage/OneDrive-TexasA&MUniversity/YEAR FOUR/SPRING 2024/CSCE 432/GitFriendly/assets/cleaned_github_page.html')
+    webbrowser.open('file:/Users/adamsulemanji/Desktop/College/SPRING2024/CSCE689-AC/GitFriendly/cleaned_github_page.html')
 
 
 
-clean('https://github.com/adamsulemanji/GitFriendly')
+clean('https://github.com/chapel-lang/chapel')

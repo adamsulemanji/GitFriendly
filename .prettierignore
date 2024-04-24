@@ -3,3 +3,6 @@ public/
 .gitignore
 .husky/
 server/venv/
+assets/
+cleaned_github_page.html
+github_page.html
