@@ -68,7 +68,8 @@ export default function Home() {
         }
       })
       .catch((error) => {
-        setIsLoading(false); // Stop loading on error
+        console.error(error);
+        setIsLoading(false);
         toast({
           title: "Fetch Error",
           description: "Failed to fetch and process the URL",
