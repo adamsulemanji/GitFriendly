@@ -46,7 +46,7 @@ export default function Home() {
 
     setIsLoading(true);
     setTimeout(() => {
-      console.log("Loading...");
+      setIsLoading(false);
     }, 10000);
     axios
       .post("http://127.0.0.1:5000/clean", { url })
@@ -68,7 +68,6 @@ export default function Home() {
         }
       })
       .catch((error) => {
-        console.error(error);
         setIsLoading(false); // Stop loading on error
         toast({
           title: "Fetch Error",

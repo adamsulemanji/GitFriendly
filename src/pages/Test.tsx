@@ -1,10 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 
 export default function Test() {
+
+  const [count, setCount] = useState(0);
+
   function handleClick() {
-    console.warn("hello world");
+    setCount(count + 1);
   }
 
   return (
@@ -16,6 +19,7 @@ export default function Test() {
         >
           Click Me
         </button>
+        <p className="text-4xl mt-4">{count}</p>
       </div>
     </div>
   );
